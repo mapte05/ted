@@ -62,7 +62,7 @@ class Config(object):
             'trigger': 'cron',
             # 'day_of_week': 6,
             # 'hour': 20, #7pm
-            'minute': 6
+            'minute': 7
         }
     ]
     SCHEDULER_VIEWS_ENABLED = True
