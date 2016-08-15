@@ -44,8 +44,7 @@ scheduler.start()
 def respond():
     """Respond to incoming calls with a simple text message."""
     resp = twilio.twiml.Response()
-    # resp.message("Hello, Mobile Monkey " + os.environ.get("JOKE")) #this line doesn't work on hosting
-    resp.message("Hey you texted me!")
+    resp.message("Hey you texted me!" + os.environ.get("JOKE"))
     return str(resp)
 
 
