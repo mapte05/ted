@@ -62,7 +62,7 @@ class Config(object):
             'trigger': 'cron',
             # 'day_of_week': 6,
             # 'hour': 20, #7pm
-            'minute': 52
+            'minute': 55
         }
     ]
     SCHEDULER_VIEWS_ENABLED = True
@@ -71,7 +71,7 @@ class Config(object):
 app = Flask(__name__)
 app.use_reloader = False
 app.debug=True
-if not app.debug:
+if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
     # The app is not in debug mode or we are in the reloaded process
     app.config.from_object(Config())
     scheduler = APScheduler()
