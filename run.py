@@ -28,8 +28,8 @@ def call_parents_reminder():
 	options = [
 		"Hey make sure to call the parents",
 		"Don't forget to call the rents",
-		"Boo boo and bow bow probably want to talk. Call home!",
-		"You're a loser call your mom"
+		"Teddy and Sunny want to talk. Call home!",
+		"You're a loser call mom"
 	]
 	message = random.choice(options) # nifty random choice
 	send_message(message)
@@ -62,14 +62,13 @@ class Config(object):
             'trigger': 'cron',
             # 'day_of_week': 6,
             # 'hour': 20, #7pm
-            'minute': 20
+            'minute': 6
         }
     ]
     SCHEDULER_VIEWS_ENABLED = True
 
 
 app = Flask(__name__)
-
 if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
     # The app is not in debug mode or we are in the reloaded process
     app.config.from_object(Config())
@@ -90,7 +89,7 @@ def respond():
 
 if __name__ == "__main__":
 
-	app.run(debug=True)
+	app.run()
 
 	# app.run(debug=True)
 
