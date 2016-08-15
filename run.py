@@ -60,9 +60,9 @@ class Config(object):
             'func': 'run:call_parents_reminder',
             # 'args': (1, 2),
             'trigger': 'cron',
-            'day_of_week': 6,
-            'hour': 20, #7pm
-            'minute': 20
+            # 'day_of_week': 6,
+            # 'hour': 20, #7pm
+            'minute': 51
         }
     ]
     SCHEDULER_VIEWS_ENABLED = True
@@ -70,10 +70,11 @@ class Config(object):
 
 app = Flask(__name__)
 app.config.from_object(Config())
-scheduler = APScheduler()
-scheduler.init_app(app)
-scheduler.start()
-
+if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    # The app is not in debug mode or we are in the reloaded process
+	scheduler = APScheduler()
+	scheduler.init_app(app)
+	scheduler.start()
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -86,7 +87,9 @@ def respond():
 
 
 if __name__ == "__main__":
+
 	app.run(debug=True, use_reloader=False)
+
 	# app.run(debug=True)
 
 
