@@ -62,14 +62,14 @@ class Config(object):
             'trigger': 'cron',
             # 'day_of_week': 6,
             # 'hour': 20, #7pm
-            'minute': 38
+            'minute': 48
         }
     ]
     SCHEDULER_VIEWS_ENABLED = True
 
 
 app = Flask(__name__)
-if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+if not app.debug:
     # The app is not in debug mode or we are in the reloaded process
     app.config.from_object(Config())
     scheduler = APScheduler()
@@ -88,7 +88,7 @@ def respond():
 
 
 if __name__ == "__main__":
-
+	print "starting app"
 	app.run(debug=True, use_reloader=False)
 
 	# app.run(debug=True)
