@@ -70,7 +70,7 @@ class Config(object):
 
 app = Flask(__name__)
 app.use_reloader = False
-app.debug=True
+# app.debug=True
 if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
     # The app is not in debug mode or we are in the reloaded process
     app.config.from_object(Config())
