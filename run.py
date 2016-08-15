@@ -4,29 +4,63 @@ from flask import Flask, request, redirect
 import twilio.twiml
 from flask_apscheduler import APScheduler
 from twilio.rest import TwilioRestClient
+import random
 
 
 account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
 auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
 client = TwilioRestClient(account_sid, auth_token)
 
-def sendMessage():
+DEFAULT_MESSAGE = "Hey I'm texting you but not sure what the message should be"
+MANEESH = "+17013615368"
+TED = "+17012039811"
+
+
+def send_message(message=DEFAULT_MESSAGE):
 	message = client.messages.create(
 		body="heyyy",
-	    to="+17013615368",
-	    from_="+17012039811", 
+	    to=MANEESH,
+	    from_=TED, 
 	    )
 	print(message.sid)
+
+def call_parents_reminder():
+	options = [
+		"Hey make sure to call the parents",
+		"Don't forget to call the rents",
+		"Boo boo and bow bow probably want to talk. Call home!",
+		"You're a loser call your mom"
+	]
+	message = random.choice(options) # nifty random choice
+	send_message(message)
 
 
 class Config(object):
     JOBS = [
         {
-            'id': 'job1',
-            'func': 'run:sendMessage',
+            'id': 'call_parents_weekday',
+            'func': 'run:call_parents_reminder',
             # 'args': (1, 2),
             'trigger': 'cron',
-            'minute': 26
+            'day_of_week': 'mon-fri',
+            'hour': '19', #7pm
+            'minute': '30'
+        },
+        {
+            'id': 'call_parents_reminder_weekend',
+            'func': 'run:call_parents_reminder',
+            # 'args': (1, 2),
+            'trigger': 'cron',
+            'day_of_week': 'sat-sun',
+            'hour': '16', #4pm
+        },
+        {
+            'id': 'call_parents_reminder_test',
+            'func': 'run:call_parents_reminder',
+            # 'args': (1, 2),
+            'trigger': 'cron',
+            'day_of_week': 'sat-sun',
+            'hour': '19', #4pm
         }
     ]
     SCHEDULER_VIEWS_ENABLED = True
