@@ -38,31 +38,22 @@ def call_parents_reminder():
 class Config(object):
     JOBS = [
         {
-            'id': 'call_parents_weekday',
+            'id': 'call_parents_reminder_weekday',
             'func': 'run:call_parents_reminder',
-            # 'args': (1, 2),
             'trigger': 'cron',
             'day_of_week': '0-4',
             'hour': 19, #7pm
-            'minute': 30
+            'minute': 30,
+            'timezone': 'America/Los_Angeles'
         },
         {
             'id': 'call_parents_reminder_weekend',
             'func': 'run:call_parents_reminder',
-            # 'args': (1, 2),
             'trigger': 'cron',
             'day_of_week': '5-6',
             'hour': 16, #4pm
-            'minute': 0
-        },
-        {
-            'id': 'call_parents_reminder_test',
-            'func': 'run:call_parents_reminder',
-            # 'args': (1, 2),
-            'trigger': 'cron',
-            # 'day_of_week': 6,
-            # 'hour': 20, #7pm
-            'minute': 55
+            'minute': 0,
+            'timezone': 'America/Los_Angeles'
         }
     ]
     SCHEDULER_VIEWS_ENABLED = True
