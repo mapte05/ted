@@ -2,7 +2,6 @@
 import os
 from flask import Flask, request, redirect
 import twilio.twiml
-from flask_apscheduler import APScheduler
 from twilio.rest import TwilioRestClient
 import random
 
@@ -35,40 +34,17 @@ def call_parents_reminder():
 	send_message(message)
 
 
-class Config(object):
-    JOBS = [
-        {
-            'id': 'call_parents_reminder_weekday',
-            'func': 'run:call_parents_reminder',
-            'trigger': 'cron',
-            'day_of_week': '0-4',
-            'hour': 19, #7pm
-            'minute': 30,
-            'timezone': 'America/Los_Angeles'
-        },
-        {
-            'id': 'call_parents_reminder_weekend',
-            'func': 'run:call_parents_reminder',
-            'trigger': 'cron',
-            'day_of_week': '5-6',
-            'hour': 16, #4pm
-            'minute': 0,
-            'timezone': 'America/Los_Angeles'
-        }
-    ]
-    SCHEDULER_VIEWS_ENABLED = True
-
 
 app = Flask(__name__)
 app.use_reloader = False
 # app.debug=True
-if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-    # The app is not in debug mode or we are in the reloaded process
-    app.config.from_object(Config())
-    scheduler = APScheduler()
-    scheduler.init_app(app)
-    print "starting scheduler"
-    scheduler.start()
+# if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+#     # The app is not in debug mode or we are in the reloaded process
+#     app.config.from_object(Config())
+#     scheduler = APScheduler()
+#     scheduler.init_app(app)
+#     print "starting scheduler"
+#     scheduler.start()
 
 
 @app.route("/", methods=['GET', 'POST'])
