@@ -27,12 +27,11 @@ class Config(object):
     SCHEDULER_VIEWS_ENABLED = True
 
 
-
-app.config.from_object(Config())
-scheduler = APScheduler()
-scheduler.init_app(app)
-print "starting scheduler"
-scheduler.start()
+# app.config.from_object(Config())
+# scheduler = APScheduler()
+# scheduler.init_app(app)
+# print "starting scheduler"
+# scheduler.start()
 
 
 # from apscheduler.schedulers.blocking import BlockingScheduler
