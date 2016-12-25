@@ -6,6 +6,7 @@ from twilio.rest import TwilioRestClient
 import random
 from flask_apscheduler import APScheduler
 import logging
+import sys
 
 
 account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
@@ -64,7 +65,7 @@ class Config(object):
             'trigger': 'cron',
             'day_of_week': 'sat-sun',
             'hour': '12', #12pm pacific
-            'minute': '17',
+            'minute': '45',
             'timezone': 'America/Los_Angeles'
         }
     ]
@@ -72,7 +73,6 @@ class Config(object):
 
 
 app = Flask(__name__)
-print "set"
 if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
     # The app is not in debug mode or we are in the reloaded process
     app.config.from_object(Config())
