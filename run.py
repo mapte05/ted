@@ -65,7 +65,7 @@ class Config(object):
             'trigger': 'cron',
             'day_of_week': 'sat-sun',
             'hour': '12', #12pm pacific
-            'minute': '45',
+            'minute': '48',
             'timezone': 'America/Los_Angeles'
         }
     ]
