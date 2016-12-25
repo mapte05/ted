@@ -4,6 +4,8 @@ from flask import Flask, request, redirect
 import twilio.twiml
 from twilio.rest import TwilioRestClient
 import random
+from flask_apscheduler import APScheduler
+import logging
 
 
 account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
@@ -15,9 +17,9 @@ MANEESH = "+17013615368"
 TED = "+17013531729"
 
 
-def send_message(message=DEFAULT_MESSAGE):
+def send_message(message_body=DEFAULT_MESSAGE):
 	message = client.messages.create(
-		body="heyyy",
+		body=message_body,
 	    to=MANEESH,
 	    from_=TED, 
 	    )
@@ -42,8 +44,9 @@ class Config(object):
             # 'args': (1, 2),
             'trigger': 'cron',
             'day_of_week': 'mon-fri',
-            'hour': '19', #7pm
-            'minute': '30'
+            'hour': '19', #7pm pacific
+            'minute': '30',
+            'timezone': 'America/Los_Angeles'
         },
         {
             'id': 'call_parents_reminder_weekend',
@@ -51,7 +54,8 @@ class Config(object):
             # 'args': (1, 2),
             'trigger': 'cron',
             'day_of_week': 'sat-sun',
-            'hour': '16', #4pm
+            'hour': '16', #4pm pacific
+            'timezone': 'America/Los_Angeles'
         },
         {
             'id': 'call_parents_reminder_test',
@@ -59,29 +63,30 @@ class Config(object):
             # 'args': (1, 2),
             'trigger': 'cron',
             'day_of_week': 'sat-sun',
-            'hour': '19', #4pm
+            'hour': '12', #12pm pacific
+            'minute': '17',
+            'timezone': 'America/Los_Angeles'
         }
     ]
     SCHEDULER_VIEWS_ENABLED = True
 
 
 app = Flask(__name__)
-app.use_reloader = False
-# app.debug=True
-# if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-#     # The app is not in debug mode or we are in the reloaded process
-#     app.config.from_object(Config())
-#     scheduler = APScheduler()
-#     scheduler.init_app(app)
-#     print "starting scheduler"
-#     scheduler.start()
+print "set"
+if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    # The app is not in debug mode or we are in the reloaded process
+    app.config.from_object(Config())
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+    print "starting scheduler"
+    scheduler.start()
 
 
 @app.route("/", methods=['GET', 'POST'])
 def respond():
     """Respond to incoming calls with a simple text message."""
     resp = twilio.twiml.Response()
-    resp.message("Hey you texted me!" + os.environ.get("JOKE"))
+    resp.message("Hey you texted me! " + os.environ.get("JOKE"))
     return str(resp)
 
 
