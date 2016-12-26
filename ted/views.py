@@ -1,0 +1,98 @@
+# all routes go here
+from ted import app
+import os
+from flask import Flask, request, redirect
+import twilio.twiml
+from twilio.rest import TwilioRestClient
+import random
+from flask_apscheduler import APScheduler
+import logging
+import sys
+
+
+account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
+auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
+client = TwilioRestClient(account_sid, auth_token)
+
+DEFAULT_MESSAGE = "Hey I'm texting you but not sure what the message should be"
+MANEESH = "+17013615368"
+TED = "+17013531729"
+
+
+def send_message(message_body=DEFAULT_MESSAGE):
+	message = client.messages.create(
+		body=message_body,
+	    to=MANEESH,
+	    from_=TED, 
+	    )
+	print(message.sid)
+
+def call_parents_reminder():
+	options = [
+		"Hey make sure to call the parents",
+		"Don't forget to call the rents",
+		"Teddy and Sunny want to talk. Call home!",
+		"You're a loser call mom"
+	]
+	message = random.choice(options) # nifty random choice
+	send_message(message)
+
+
+# class Config(object):
+#     JOBS = [
+#         {
+#             'id': 'call_parents_weekday',
+#             'func': 'run:call_parents_reminder',
+#             # 'args': (1, 2),
+#             'trigger': 'cron',
+#             'day_of_week': 'mon-fri',
+#             'hour': '19', #7pm pacific
+#             'minute': '30',
+#             'timezone': 'America/Los_Angeles'
+#         },
+#         {
+#             'id': 'call_parents_reminder_weekend',
+#             'func': 'run:call_parents_reminder',
+#             # 'args': (1, 2),
+#             'trigger': 'cron',
+#             'day_of_week': 'sat-sun',
+#             'hour': '16', #4pm pacific
+#             'timezone': 'America/Los_Angeles'
+#         },
+#         {
+#             'id': 'call_parents_reminder_test',
+#             'func': 'run:call_parents_reminder',
+#             # 'args': (1, 2),
+#             'trigger': 'cron',
+#             'day_of_week': 'sat-sun',
+#             'hour': '12', #12pm pacific
+#             'minute': '48',
+#             'timezone': 'America/Los_Angeles'
+#         }
+#     ]
+#     SCHEDULER_VIEWS_ENABLED = True
+
+
+@app.route("/", methods=['GET', 'POST'])
+def respond():
+    """Respond to incoming calls with a simple text message."""
+    resp = twilio.twiml.Response()
+    resp.message("Hey this is Ted. I'm just answering your text!")
+    return str(resp)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

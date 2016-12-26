@@ -1,1 +1,1 @@
-web: gunicorn run:app --log-file -
+web: gunicorn ted:app --log-file -

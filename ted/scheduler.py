@@ -1,4 +1,3 @@
-
 from run import app
 from flask_apscheduler import APScheduler
 
