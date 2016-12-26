@@ -1,23 +1,21 @@
-from run import app
-from flask_apscheduler import APScheduler
 
 
-class Config(object):
+class SchedulerConfig(object):
     JOBS = [
         {
             'id': 'call_parents_reminder_weekday',
-            'func': 'run:call_parents_reminder',
+            'func': 'ted.views:call_parents_reminder',
             'trigger': 'cron',
-            'day_of_week': '0-4',
+            'day_of_week': '0-4', #mon-fri
             'hour': 19, #7pm
             'minute': 30,
             'timezone': 'America/Los_Angeles'
         },
         {
             'id': 'call_parents_reminder_weekend',
-            'func': 'run:call_parents_reminder',
+            'func': 'ted.views:call_parents_reminder',
             'trigger': 'cron',
-            'day_of_week': '5-6',
+            'day_of_week': '5-6', #sat-sun
             'hour': 16, #4pm
             'minute': 0,
             'timezone': 'America/Los_Angeles'
@@ -26,11 +24,16 @@ class Config(object):
     SCHEDULER_VIEWS_ENABLED = True
 
 
-# app.config.from_object(Config())
-# scheduler = APScheduler()
-# scheduler.init_app(app)
-# print "starting scheduler"
-# scheduler.start()
+    # test job below
+    # {
+    #     'id': 'test',
+    #     'func': 'ted.views:call_parents_reminder',
+    #     'trigger': 'cron',
+    #     'day_of_week': '0-6',
+    #     'hour': 13,
+    #     'minute': 15,
+    #     'timezone': 'America/Los_Angeles'
+    # }
 
 
 # from apscheduler.schedulers.blocking import BlockingScheduler
